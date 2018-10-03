@@ -36,17 +36,17 @@ var Utils = {
         };
     },
 
-    _getOSInfoFromNodeJS: function() {
-        return os.platform();
-    },
+    // _getOSInfoFromNodeJS: function() {
+    //     return os.platform();
+    // },
 
-    _getOSInfoFromBrowser: function() {
-        return window.navigator.userAgent;
-    },
+    // _getOSInfoFromBrowser: function() {
+    //     return window.navigator.userAgent;
+    // },
 
-    _getOSInfoFromNativeScript: function() {
-        return (global.hasOwnProperty && global.hasOwnProperty('android') ? 'Android' : 'iOS') + ' - NativeScript';
-    },
+    // _getOSInfoFromNativeScript: function() {
+    //     return (global.hasOwnProperty && global.hasOwnProperty('android') ? 'Android' : 'iOS') + ' - NativeScript';
+    // },
 
     getOS: function() {
         // var self = this;
@@ -182,55 +182,55 @@ var Utils = {
             return logger;
         };
 
-        var fileLoggerFunction = function(){
-            var logger = function(args){
-                if (!fs) {
-                    throw unsupported;
-                } else {
-                    var data = [];
+        // var fileLoggerFunction = function(){
+        //     var logger = function(args){
+        //         if (!fs) {
+        //             throw unsupported;
+        //         } else {
+        //             var data = [];
 
-                    for (var i = 0; i < args.length; i++) {
-                        data.push(JSON.stringify(args[i]));
-                    }
+        //             for (var i = 0; i < args.length; i++) {
+        //                 data.push(JSON.stringify(args[i]));
+        //             }
 
-                    data = data.join(' ');
+        //             data = data.join(' ');
 
-                    var toLog = '\n' + new Date() + '. ' + data;
+        //             var toLog = '\n' + new Date() + '. ' + data;
 
-                    fs.appendFile(config.debug.file, toLog, function(err) {
-                        if(err) {
-                            return console.error('Error while writing log to file. Error: ' + err);
-                        }
-                    });
-                }
-            };
+        //             fs.appendFile(config.debug.file, toLog, function(err) {
+        //                 if(err) {
+        //                     return console.error('Error while writing log to file. Error: ' + err);
+        //                 }
+        //             });
+        //         }
+        //     };
 
-            return logger;
-        };
+        //     return logger;
+        // };
 
         // Build loggers
         // format "debug: { }"
 
         if(typeof config.debug === 'object'){
             if(typeof config.debug.mode === 'number'){
-                if(config.debug.mode == 1){
+                // if(config.debug.mode == 1){
                     logger = consoleLoggerFunction();
                     this.loggers.push(logger);
-                } else if(config.debug.mode == 2){
-                    logger = fileLoggerFunction();
-                    this.loggers.push(logger);
-                }
+                // } else if(config.debug.mode == 2){
+                //     logger = fileLoggerFunction();
+                //     this.loggers.push(logger);
+                // }
             } else if(typeof config.debug.mode === 'object'){
                 var self = this;
 
                 config.debug.mode.forEach(function(mode) {
-                    if(mode === 1){
+                    // if(mode === 1){
                         logger = consoleLoggerFunction();
                         self.loggers.push(logger);
-                    } else if (mode === 2){
-                        logger = fileLoggerFunction();
-                        self.loggers.push(logger);
-                    }
+                    // } else if (mode === 2){
+                    //     logger = fileLoggerFunction();
+                    //     self.loggers.push(logger);
+                    // }
                 });
             }
 

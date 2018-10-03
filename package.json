@@ -38,12 +38,8 @@
   },
   "dependencies": {
     "crypto-js": "3.1.2-2",
-    "form-data": "^2.3.1",
-    "nativescript-xmpp-client": "^1.2.0",
-    "node-fetch": "^1.7.3",
-    "node-xmpp-client": "^3.0.0",
     "sdp-transform": "^2.3.0",
-    "strophe.js": "1.2.12",
+    "strophe.js": "larkrcom/strophe.js",
     "webrtc-adapter": "^5.0.6",
     "xmldom": "^0.1.27"
   },
@@ -78,8 +74,7 @@
   },
   "config": {
     "ghooks": {
-      "pre-commit": "npm run lint",
-      "pre-push": "jasmine"
+      "pre-commit": "npm run lint"
     }
   },
   "scripts": {
