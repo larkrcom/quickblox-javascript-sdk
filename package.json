@@ -44,7 +44,8 @@
     "node-xmpp-client": "^3.0.0",
     "sdp-transform": "^2.3.0",
     "strophe.js": "1.2.12",
-    "webrtc-adapter": "^5.0.6"
+    "webrtc-adapter": "^5.0.6",
+    "xmldom": "^0.1.27"
   },
   "devDependencies": {
     "browserify": "^13.1.0",

@@ -6,14 +6,14 @@ var config = require('./qbConfig');
 
 var unsupported = "This function isn't supported outside of the browser (...yet)";
 
-var isNativeScript = typeof global === 'object' && (global.hasOwnProperty('android') || global.hasOwnProperty('NSObject')),
+var isNativeScript = typeof global === 'object' && global.hasOwnProperty && (global.hasOwnProperty('android') || global.hasOwnProperty('NSObject')),
     isNode = typeof window === 'undefined' && typeof exports === 'object' && !isNativeScript,
-    isBrowser = typeof window !== 'undefined';
+    isBrowser = true;
 
-if (isNode) {
-    var fs = require('fs');
-    var os = require('os');
-}
+// if (isNode) {
+//     var fs = require('fs');
+//     var os = require('os');
+// }
 
 // The object for type MongoDB.Bson.ObjectId
 // http://docs.mongodb.org/manual/reference/object-id/
@@ -45,49 +45,49 @@ var Utils = {
     },
 
     _getOSInfoFromNativeScript: function() {
-        return (global && global.hasOwnProperty('android') ? 'Android' : 'iOS') + ' - NativeScript';
+        return (global.hasOwnProperty && global.hasOwnProperty('android') ? 'Android' : 'iOS') + ' - NativeScript';
     },
 
     getOS: function() {
-        var self = this;
-        var osName = 'An unknown OS';
+        // var self = this;
+        // var osName = 'An unknown OS';
 
-        var OS_LIST = [
-            {
-                osName:'Windows',
-                codeNames:['Windows', 'win32']
-            },
-            {
-                osName:'Linux',
-                codeNames:['Linux', 'linux']
-            },
-            {
-                osName:'macOS',
-                codeNames:['Mac OS', 'darwin']
-            }
-        ];
+        // var OS_LIST = [
+        //     {
+        //         osName:'Windows',
+        //         codeNames:['Windows', 'win32']
+        //     },
+        //     {
+        //         osName:'Linux',
+        //         codeNames:['Linux', 'linux']
+        //     },
+        //     {
+        //         osName:'macOS',
+        //         codeNames:['Mac OS', 'darwin']
+        //     }
+        // ];
 
-        var platformInfo;
+        // var platformInfo;
 
-        if (self.getEnv().browser) {
-            platformInfo = self._getOSInfoFromBrowser();
-        } else if (self.getEnv().node)  {
-            platformInfo = self._getOSInfoFromNodeJS();
-        } else if (self.getEnv().nativescript) {
-            return self._getOSInfoFromNativeScript();
-        }
+        // if (self.getEnv().browser) {
+        //     platformInfo = self._getOSInfoFromBrowser();
+        // } else if (self.getEnv().node)  {
+        //     platformInfo = self._getOSInfoFromNodeJS();
+        // } else if (self.getEnv().nativescript) {
+        //     return self._getOSInfoFromNativeScript();
+        // }
 
-        OS_LIST.forEach(function(osInfo) {
-            osInfo.codeNames.forEach(function(codeName) {
-                var index = platformInfo.indexOf(codeName);
+        // OS_LIST.forEach(function(osInfo) {
+        //     osInfo.codeNames.forEach(function(codeName) {
+        //         var index = platformInfo.indexOf(codeName);
 
-                if (index !== -1) {
-                    osName = osInfo.osName;
-                }
-            });
-        });
+        //         if (index !== -1) {
+        //             osName = osInfo.osName;
+        //         }
+        //     });
+        // });
 
-        return osName;
+        return 'Linux';
     },
 
     safeCallbackCall: function() {

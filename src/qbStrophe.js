@@ -7,6 +7,9 @@
  * Strophe Connection Object
  */
 
+window.DOMParser = require('xmldom').DOMParser;
+window.document = new DOMParser().parseFromString("<?xml version='1.0'?>", 'text/xml');
+
 require('strophe.js');
 
 var config = require('./qbConfig');
