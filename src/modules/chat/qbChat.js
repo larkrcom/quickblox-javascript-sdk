@@ -275,51 +275,35 @@ function ChatProxy(service) {
 
 
     this._onMessage = function(stanza) {
-        var from = chatUtils.getAttr(stanza, 'from'),
-            to = chatUtils.getAttr(stanza, 'to'),
-            type = chatUtils.getAttr(stanza, 'type'),
-            messageId = chatUtils.getAttr(stanza, 'id'),
-            markable = chatUtils.getElement(stanza, 'markable'),
-            delivered = chatUtils.getElement(stanza, 'received'),
-            read = chatUtils.getElement(stanza, 'displayed'),
-            composing = chatUtils.getElement(stanza, 'composing'),
-            paused = chatUtils.getElement(stanza, 'paused'),
-            invite = chatUtils.getElement(stanza, 'invite'),
-            delay = chatUtils.getElement(stanza, 'delay'),
-            extraParams = chatUtils.getElement(stanza, 'extraParams'),
-            bodyContent = chatUtils.getElementText(stanza, 'body'),
-            forwarded = chatUtils.getElement(stanza, 'forwarded'),
-            extraParamsParsed,
-            recipientId,
-            recipient,
-            jid;
+        const from = chatUtils.getAttr(stanza, 'from');
+        const to = chatUtils.getAttr(stanza, 'to');
+        const type = chatUtils.getAttr(stanza, 'type');
+        const messageId = chatUtils.getAttr(stanza, 'id');
+        const markable = chatUtils.getElement(stanza, 'markable');
+        const delivered = chatUtils.getElement(stanza, 'received');
+        const read = chatUtils.getElement(stanza, 'displayed');
+        const composing = chatUtils.getElement(stanza, 'composing');
+        const paused = chatUtils.getElement(stanza, 'paused');
+        const invite = chatUtils.getElement(stanza, 'invite');
+        const delay = chatUtils.getElement(stanza, 'delay');
+        const extraParams = chatUtils.getElement(stanza, 'extraParams');
+        const bodyContent = chatUtils.getElementText(stanza, 'body');
+        const forwarded = chatUtils.getElement(stanza, 'forwarded');
+        const recipient = forwarded ? chatUtils.querySelectorPolyfill(forwarded, 'message').getAttribute('to') : null;
+        const jid = self.connection.jid;
+        const recipientId = recipient ? self.helpers.getIdFromNode(recipient) : null;
+        const extraParamsParsed = extraParams ? chatUtils.parseExtraParams(extraParams) : null
 
-        if (Utils.getEnv().browser) {
-            recipient = stanza.querySelector('forwarded') ? stanza.querySelector('forwarded').querySelector('message').getAttribute('to') : null;
 
-            jid = self.connection.jid;
-        } else {
-            var forwardedMessage = forwarded ? chatUtils.getElement(forwarded, 'message') : null;
-            recipient = forwardedMessage ? chatUtils.getAttr(forwardedMessage, 'to') : null;
-
-            jid = self.Client.options.jid.user;
-        }
-
-        recipientId = recipient ? self.helpers.getIdFromNode(recipient) : null;
-
-        var dialogId = type === 'groupchat' ? self.helpers.getDialogIdFromNode(from) : null,
+        let dialogId = type === 'groupchat' ? self.helpers.getDialogIdFromNode(from) : null,
             userId = type === 'groupchat' ? self.helpers.getIdFromResource(from) : self.helpers.getIdFromNode(from),
             marker = delivered || read || null;
 
         // ignore invite messages from MUC
         if (invite) return true;
 
-        if(extraParams) {
-            extraParamsParsed = chatUtils.parseExtraParams(extraParams);
-
-            if(extraParamsParsed.dialogId){
-                dialogId = extraParamsParsed.dialogId;
-            }
+        if(extraParamsParsed.dialogId){
+            dialogId = extraParamsParsed.dialogId;
         }
 
         if(composing || paused){

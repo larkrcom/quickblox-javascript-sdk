@@ -64,6 +64,44 @@ var qbChatHelpers = {
 
         return attr ? attr : null;
     },
+    spreadPolyfill: nodes => {
+        if (!nodes.length) return []
+        let array = [];
+        
+        for (let i = 0; i < nodes.length; i++) {
+            array.push(nodes[i]);
+        }
+        
+        return array;
+    },
+    querySelectorAllPolyfill: (root, query) => {
+        let nodeList = qbChatHelpers.spreadPolyfill(root.childNodes);
+        let results = null;
+
+        while (nodeList.length > 0) {
+            node = nodeList.pop();
+            if (node.nodeName === query) results.push(node);
+            if (node.childNodes) {
+                nodeList.push(...qbChatHelpers.spreadPolyfill(node.childNodes));
+            }
+        }
+
+        return results;
+    },
+    querySelectorPolyfill: (root, query) => {
+        let nodeList = qbChatHelpers.spreadPolyfill(root.childNodes);
+        let node = null;
+
+        while (nodeList.length > 0) {
+            node = nodeList.pop();
+            if (node.nodeName === query) return node;
+            if (node.childNodes) {
+                nodeList.push(...qbChatHelpers.spreadPolyfill(node.childNodes));
+            }
+        }
+
+        return null;
+    },
     getElement: function(stanza, elName) {
         var el;
 
@@ -72,7 +110,8 @@ var qbChatHelpers = {
         } else if(typeof stanza.getChild === 'function'){
             el = stanza.getChild(elName);
         } else {
-            throw ERR_UNKNOWN_INTERFACE;
+            el = qbChatHelpers.querySelectorPolyfill(stanza, elName);
+            // throw ERR_UNKNOWN_INTERFACE; -- Fixed?
         }
 
         return el ? el : null;
@@ -85,7 +124,8 @@ var qbChatHelpers = {
         } else if(typeof stanza.getChild === 'function'){
             el = stanza.getChild(elName);
         } else {
-            throw ERR_UNKNOWN_INTERFACE;
+            el = qbChatHelpers.querySelectorAllPolyfill(stanza, elName);
+            // throw ERR_UNKNOWN_INTERFACE;
         }
 
         return el ? el : null;
@@ -100,7 +140,9 @@ var qbChatHelpers = {
         } else if(typeof stanza.getChildText === 'function') {
             txt = stanza.getChildText(elName);
         } else {
-            throw ERR_UNKNOWN_INTERFACE;
+            el = qbChatHelpers.querySelectorPolyfill(stanza, elName);
+            txt = el ? el.textContent : null;
+            // throw ERR_UNKNOWN_INTERFACE;
         }
 
         return txt ? txt : null;
