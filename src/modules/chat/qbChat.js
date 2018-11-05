@@ -17,7 +17,7 @@ if (Utils.getEnv().browser) {
     var Connection = require('../../qbStrophe');
 
     Strophe.addNamespace('CARBONS', chatUtils.MARKERS.CARBONS);
-    Strophe.addNamespace('CHAT_MARKE RS', chatUtils.MARKERS.CHAT);
+    Strophe.addNamespace('CHAT_MARKERS', chatUtils.MARKERS.CHAT);
     Strophe.addNamespace('PRIVACY_LIST', chatUtils.MARKERS.PRIVACY);
     Strophe.addNamespace('CHAT_STATES', chatUtils.MARKERS.STATES);
 } else if (Utils.getEnv().nativescript) {
