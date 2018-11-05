@@ -17,7 +17,7 @@ if (Utils.getEnv().browser) {
     var Connection = require('../../qbStrophe');
 
     Strophe.addNamespace('CARBONS', chatUtils.MARKERS.CARBONS);
-    Strophe.addNamespace('CHAT_MARKERS', chatUtils.MARKERS.CHAT);
+    Strophe.addNamespace('CHAT_MARKE RS', chatUtils.MARKERS.CHAT);
     Strophe.addNamespace('PRIVACY_LIST', chatUtils.MARKERS.PRIVACY);
     Strophe.addNamespace('CHAT_STATES', chatUtils.MARKERS.STATES);
 } else if (Utils.getEnv().nativescript) {
@@ -294,15 +294,14 @@ function ChatProxy(service) {
         const recipientId = recipient ? self.helpers.getIdFromNode(recipient) : null;
         const extraParamsParsed = extraParams ? chatUtils.parseExtraParams(extraParams) : null
 
-
-        let dialogId = type === 'groupchat' ? self.helpers.getDialogIdFromNode(from) : null,
-            userId = type === 'groupchat' ? self.helpers.getIdFromResource(from) : self.helpers.getIdFromNode(from),
-            marker = delivered || read || null;
+        const dialogId = type === 'groupchat' ? self.helpers.getDialogIdFromNode(from) : null
+        const userId = type === 'groupchat' ? self.helpers.getIdFromResource(from) : self.helpers.getIdFromNode(from)
+        const marker = delivered || read || null
 
         // ignore invite messages from MUC
         if (invite) return true;
 
-        if(extraParamsParsed.dialogId){
+        if (dialogId && extraParamsParsed.dialogId) {
             dialogId = extraParamsParsed.dialogId;
         }
 
